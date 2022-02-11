@@ -6,7 +6,7 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 15:55:57 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/10 16:38:58 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/11 14:56:59 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 
 # include "farbfeld_to_img.h"
 
-void    destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list);
+typedef struct s_goose
+{
+	int	x;
+	int	y;
+}	t_goose;
+
+void	destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list);
+void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img);
 
 #endif

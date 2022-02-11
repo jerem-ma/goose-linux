@@ -1,6 +1,6 @@
 NAME		=	goose
 
-SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c mlx_new_window_without_border.c\
+SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c mlx_new_window_without_border.c goose.c\
 				files.c
 
 _OBJS		=	${SRCS:.c=.o}
@@ -19,7 +19,6 @@ define count_files
 	if [ $$TOTAL_FILES -ne 0 ]; then \
 		echo -n $$TOTAL_FILES > .MAKEFILE_total_files; \
 		echo -n "0" > .MAKEFILE_compiled_files; \
-		tput civis; \
 	fi;
 endef
 
@@ -93,7 +92,7 @@ build/%.o	:	srcs/%.c
 
 $(NAME)	:	$(OBJS) | libs
 	@@echo "$(ORANGE)Linking $(BLUE)$@ ...$(NO_COLOR)"
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lXext -lX11 -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lXfixes -lXext -lX11 -o $(NAME)
 	@$(call clean)
 	@echo "$(GREEN)$@ created !$(NO_COLOR)"
 
