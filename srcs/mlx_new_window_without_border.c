@@ -1,21 +1,3 @@
-/*
-** mlx_new_window.c for MiniLibX in 
-** 
-** Made by Charlie Root
-** Login   <ol@epitech.net>
-** 
-** Started on  Mon Jul 31 17:29:02 2000 Charlie Root
-** Last update Thu Oct  4 15:44:43 2001 Charlie Root
-*/
-
-
-/*
-** We do not use White/BlackPixel macro, TrueColor Visual make sure
-** 0 is black & -1 is white
-**
-** With mlx_int_wait_first_expose, no flush is needed.
-*/
-
 #include	"mlx_int.h"
 
 

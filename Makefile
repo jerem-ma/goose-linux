@@ -1,7 +1,8 @@
-NAME		=	goose
+NAME		=	capivara
 
-SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c mlx_new_window_without_border.c\
-				files.c
+SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c \
+				farbfeld_to_img.c mlx_new_window_without_border.c \
+				files.c init.c
 
 _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
@@ -103,8 +104,8 @@ libs	:
 		make -C $$(dirname $$lib);\
 	done
 
-clean	:	
-	rm -Rf build/
+clean	:
+	rm -rf build/
 
 cleanlibs	:
 	@for lib in $(LIBS); do\
@@ -127,7 +128,7 @@ fcleanlibs	:
 fcleanall	:	fclean fcleanlibs
 
 
-re		:	fclean 
+re		:	fclean
 			@$(call count_files)
 			@make -s $(NAME) || $(MAKE) reset
 

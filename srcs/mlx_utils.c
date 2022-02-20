@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 11:13:28 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/08 17:36:55 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/20 01:14:35 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "goose.h"
+#include "capivara.h"
 
 void	destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list)
 {

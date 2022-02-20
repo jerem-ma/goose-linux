@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   farbfeld_to_img.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
+/*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:27:43 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/10 17:48:15 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/20 01:15:40 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "farbfeld_to_img.h"
+
 
 static int	parse_header(t_file *file, unsigned int *width,
 		unsigned int *height);
