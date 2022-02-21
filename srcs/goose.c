@@ -6,7 +6,7 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:04:49 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/11 18:10:29 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/15 16:03:44 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img)
 		goose.x = rand() % goose.x;
 		goose.y = rand() % goose.y;
 		mlx_put_image_to_window(mlx_ptr, w_list, img, goose.x, goose.y);
+		usleep(500000);
 		XClearArea(mlx_ptr->display, w_list->window, goose.x, goose.y,
 			img->width, img->height, 0);
 	}
