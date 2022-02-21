@@ -1,3 +1,5 @@
+EXTRA_PATH_METADATA = {'mlx-capivara/libs/.minilibx-linux': {'path': '.minilibx-linux'}}
+
 NAME		=	capivara
 
 SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c \
@@ -9,8 +11,8 @@ OBJS		=	$(addprefix build/, $(_OBJS))
 
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra -g3
-INCLUDE		=	-I includes/ -I libs/minilibx-linux
-LIBS		=	libs/minilibx-linux/libmlx.a
+INCLUDE		=	-I includes/ -I libs/.minilibx-linux
+LIBS		=	libs/.minilibx-linux/libmlx.a
 
 
 #====================Scripts=======================#
@@ -77,7 +79,7 @@ NO_COLOR	=	\033[m
 #==================================================#
 
 
-all		:	
+all		:
 			@$(call count_files)
 			@make -s $(NAME) || $(MAKE) reset
 
@@ -86,17 +88,17 @@ build/%.o	:	srcs/%.c
 		mkdir -p $(dir $@);\
 	fi
 	@$(call draw_bar)
-	@echo "\r$(CYAN)Compiling $(BLUE)$@ ...$(NO_COLOR)                             "
-	@$(call draw_bar) 
+	@echo "Compiling $@ ...                         "
+	@$(call draw_bar)
 	@$(CC) ${CFLAGS} ${INCLUDE} -c $< -o $@
 	@$(call file_compiled)
 			@$(call draw_bar)
 
 $(NAME)	:	$(OBJS) | libs
-	@@echo "$(ORANGE)Linking $(BLUE)$@ ...$(NO_COLOR)"
+	@@echo "Linking $@ ..."
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lXext -lX11 -o $(NAME)
 	@$(call clean)
-	@echo "$(GREEN)$@ created !$(NO_COLOR)"
+	@echo "$@ created ! "
 
 libs	:
 	@for lib in $(LIBS); do\

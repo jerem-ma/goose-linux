@@ -6,15 +6,15 @@
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:27:43 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/20 01:15:40 by anhigo-s         ###   ########.fr       */
+/*   Updated: 2022/02/20 21:58:27 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "farbfeld_to_img.h"
 
 
-static int	parse_header(t_file *file, unsigned int *width,
-		unsigned int *height);
+static int	parse_header(t_file *file, unsigned int *width, \
+unsigned int *height);
 static int	skip_magic_value(t_file *file);
 static int	get_n_next_bytes(t_file *file, char *bytes, int n);
 static void	reverse(char *array, int len);

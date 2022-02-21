@@ -6,7 +6,7 @@
 /*   By: anhigo-s <anhigo-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 15:55:57 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/20 01:30:01 by anhigo-s         ###   ########.fr       */
+/*   Updated: 2022/02/20 21:54:57 by anhigo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,5 @@ typedef struct s_c_data
 
 int		key_check(int keycode, t_c_data	*data);
 void	init_cap(t_c_data *data);
-void    destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list);
-
+void	destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list);
 #endif
