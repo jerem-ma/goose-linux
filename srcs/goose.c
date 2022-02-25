@@ -6,29 +6,66 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:04:49 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/15 16:03:44 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/25 17:56:41 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "goose.h"
 
-Bool MakeAlwaysOnTop(Display* display, Window root, Window mywin);
+static void	generate_goose_pos(t_xvar *xvar, t_goose *goose);
+static void	get_direction(t_couple *start, t_couple *end, t_couple_double *direction);
+Bool		MakeAlwaysOnTop(Display* display, Window root, Window mywin);
 
 void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img)
 {
-	t_goose	goose;
+	t_direction	direction;
+	t_goose		goose;
+	t_goose		goose_final;
+	t_goose		goose_start;
+	int			t;
 
 	MakeAlwaysOnTop(mlx_ptr->display, mlx_ptr->root, w_list->window);
+	generate_goose_pos(mlx_ptr, &goose);
 	while (1)
 	{
-		mlx_get_screen_size(mlx_ptr, &goose.x, &goose.y);
-		goose.x = rand() % goose.x;
-		goose.y = rand() % goose.y;
-		mlx_put_image_to_window(mlx_ptr, w_list, img, goose.x, goose.y);
-		usleep(500000);
-		XClearArea(mlx_ptr->display, w_list->window, goose.x, goose.y,
-			img->width, img->height, 0);
+		generate_goose_pos(mlx_ptr, &goose_final);
+		goose_start = goose;
+		get_direction(&goose_start, &goose_final, &direction);
+		t = 0;
+		while (t < (goose_final.x - goose_start.x) / (direction.x * GOOSE_SPEED / 50))
+		{
+			XClearArea(mlx_ptr->display, w_list->window, goose.x, goose.y,
+				img->width, img->height, 0);
+			goose.x = goose_start.x + 1.0 * t * GOOSE_SPEED * direction.x / 50;
+			goose.y = goose_start.y + 1.0 * t * GOOSE_SPEED * direction.y / 50;
+			if (abs(goose_final.x - goose.x) <= 3 && abs(goose_final.y - goose.y) <= 3)
+				goose = goose_final;
+			mlx_put_image_to_window(mlx_ptr, w_list, img, goose.x, goose.y);
+			usleep(20000);
+			t++;
+		}
+		usleep(5000000);
 	}
+}
+
+static void	generate_goose_pos(t_xvar *mlx_ptr, t_goose *goose)
+{
+	mlx_get_screen_size(mlx_ptr, &goose->x, &goose->y);
+	goose->x = rand() % goose->x;
+	goose->y = rand() % goose->y;
+}
+
+static void get_direction(t_couple *start, t_couple *end, t_couple_double *direction)
+{
+	double	dist;
+	double	dist_x;
+	double	dist_y;
+
+	dist_x = end->x - start->x;
+	dist_y = end->y - start->y;
+	dist = sqrt(dist_x * dist_x + dist_y * dist_y);
+	direction->x = dist_x / dist;
+	direction->y = dist_y / dist;
 }
 
 #define _NET_WM_STATE_REMOVE        0    // remove/unset property

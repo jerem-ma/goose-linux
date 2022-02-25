@@ -92,7 +92,7 @@ build/%.o	:	srcs/%.c
 
 $(NAME)	:	$(OBJS) | libs
 	@@echo "$(ORANGE)Linking $(BLUE)$@ ...$(NO_COLOR)"
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lXfixes -lXext -lX11 -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lm -lXfixes -lXext -lX11 -o $(NAME)
 	@$(call clean)
 	@echo "$(GREEN)$@ created !$(NO_COLOR)"
 
