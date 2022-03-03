@@ -6,10 +6,11 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 16:13:07 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/11 16:01:05 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/03 17:50:23 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libgen.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
 
@@ -20,18 +21,24 @@
 
 static void	remove_input(t_xvar *mlx_ptr, t_win_list *w_list);
 
-int	main(void)
+int	main(int ac, char **av)
 {	
-	t_xvar					*mlx_ptr;
-	t_win_list				*w_list;
-	t_img					*img;
+	t_xvar		*mlx_ptr;
+	t_win_list	*w_list;
+	t_img		*img;
+	char		*path;
 
+	(void) ac;
 	srand(time(NULL));
 	mlx_ptr = mlx_init();
 	XSynchronize(mlx_ptr->display, True);
 	if (!mlx_ptr)
 		return (0);
-	img = farbfeld_to_img(mlx_ptr, "res/little_goose.ff");
+	path = malloc(sizeof(*path) * 50);
+	memcpy(path, dirname(av[0]), strlen(dirname(av[0])));
+	path[strlen(dirname(av[0]))] = 0;
+	printf("%s\n", path);
+	img = farbfeld_to_img(mlx_ptr, strcat(path, "/res/little_goose.ff"));
 	if (!img)
 	{
 		destroy_everything(mlx_ptr, 0);

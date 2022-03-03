@@ -7,7 +7,7 @@ _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
 
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra -g3
+CFLAGS		=	-Wall -Werror -Wextra -g3 -O0 -fsanitize=address
 INCLUDE		=	-I includes/ -I libs/minilibx-linux
 LIBS		=	libs/minilibx-linux/libmlx.a
 

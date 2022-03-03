@@ -6,67 +6,107 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:04:49 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/25 17:56:41 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/03 17:42:58 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "goose.h"
+#include <math.h>
 
-static void	generate_goose_pos(t_xvar *xvar, t_goose *goose);
-static void	get_direction(t_couple *start, t_couple *end, t_couple_double *direction);
-Bool		MakeAlwaysOnTop(Display* display, Window root, Window mywin);
+//static void	generate_goose_pos(t_xvar *xvar, t_goose *goose);
+//static void	get_direction(t_couple *start, t_couple *end, t_couple_double *direction);
+Bool	MakeAlwaysOnTop(Display* display, Window root, Window mywin);
+t_img	*rotate(t_xvar *mlx_ptr, t_img *img, double angle);
+void	shear(double angle, int *x, int *y);
 
 void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img)
 {
-	t_direction	direction;
-	t_goose		goose;
-	t_goose		goose_final;
-	t_goose		goose_start;
-	int			t;
+	double	i;
+	t_img	*r_img;
 
 	MakeAlwaysOnTop(mlx_ptr->display, mlx_ptr->root, w_list->window);
-	generate_goose_pos(mlx_ptr, &goose);
-	while (1)
+	i = 0;
+	while (i < 2 * M_PI)
 	{
-		generate_goose_pos(mlx_ptr, &goose_final);
-		goose_start = goose;
-		get_direction(&goose_start, &goose_final, &direction);
-		t = 0;
-		while (t < (goose_final.x - goose_start.x) / (direction.x * GOOSE_SPEED / 50))
-		{
-			XClearArea(mlx_ptr->display, w_list->window, goose.x, goose.y,
-				img->width, img->height, 0);
-			goose.x = goose_start.x + 1.0 * t * GOOSE_SPEED * direction.x / 50;
-			goose.y = goose_start.y + 1.0 * t * GOOSE_SPEED * direction.y / 50;
-			if (abs(goose_final.x - goose.x) <= 3 && abs(goose_final.y - goose.y) <= 3)
-				goose = goose_final;
-			mlx_put_image_to_window(mlx_ptr, w_list, img, goose.x, goose.y);
-			usleep(20000);
-			t++;
-		}
-		usleep(5000000);
+		r_img = rotate(mlx_ptr, img, i);
+		mlx_put_image_to_window(mlx_ptr, w_list, r_img, 40, 40);
+		i += 0.1;
+		usleep(100000000);
 	}
 }
 
-static void	generate_goose_pos(t_xvar *mlx_ptr, t_goose *goose)
+t_img	*rotate(t_xvar *mlx_ptr, t_img *img, double angle)
 {
-	mlx_get_screen_size(mlx_ptr, &goose->x, &goose->y);
-	goose->x = rand() % goose->x;
-	goose->y = rand() % goose->y;
+	t_img		*r_img;
+	int			new_width;
+	int			new_height;
+	t_couple	pos_old_img;
+	t_couple	pos_new_img;
+	int			junk;
+	char		*data;
+	char		*r_data;;
+
+	new_width = fabs(img->width * cos(angle)) + fabs(img->height * sin(angle));
+	new_height = fabs(img->height * cos(angle)) + fabs(img->width * sin(angle));
+	r_img = mlx_new_image(mlx_ptr, new_width, new_height);
+	if (!r_img)
+		return (0);
+	double	original_centre_height = (img->height+1)/2-1;
+	double	original_centre_width = (img->width+1)/2-1;
+
+	double	new_centre_height = (new_height+1)/2-1;
+	double	new_centre_width = (new_width+1)/2-1;
+	data = mlx_get_data_addr(img, &junk, &junk, &junk);
+	r_data = mlx_get_data_addr(r_img, &junk, &junk, &junk);
+	while (pos_old_img.y < img->height)
+	{
+		pos_old_img.x = 0;
+		while (pos_old_img.x < img->width)
+		{
+			pos_new_img.x = img->width - 1 - pos_old_img.x - original_centre_width;
+			pos_new_img.y = img->height - 1 - pos_old_img.y - original_centre_height;
+			shear(angle, &pos_new_img.x, &pos_new_img.y);
+			pos_new_img.x = new_centre_width - pos_new_img.x;
+			pos_new_img.y = new_centre_height - pos_new_img.y;
+			r_data[pos_new_img.y * new_width + pos_new_img.x] = data[pos_old_img.y * img->width + pos_old_img.x];
+			pos_old_img.x++;
+		}
+		pos_old_img.y++;
+	}
+	return (r_img);
 }
 
-static void get_direction(t_couple *start, t_couple *end, t_couple_double *direction)
+void	shear(double angle, int *x, int *y)
 {
-	double	dist;
-	double	dist_x;
-	double	dist_y;
+	double	tangent;
 
-	dist_x = end->x - start->x;
-	dist_y = end->y - start->y;
-	dist = sqrt(dist_x * dist_x + dist_y * dist_y);
-	direction->x = dist_x / dist;
-	direction->y = dist_y / dist;
+	tangent = tan(angle / 2);
+	*x = *x - (double) *y * tangent;
+
+	*y = (double) *x * sin(angle) + *y;
+
+	*x = *x - (double) *y * tangent;
 }
+
+//static void	generate_goose_pos(t_xvar *mlx_ptr, t_goose *goose)
+//{
+//	mlx_get_screen_size(mlx_ptr, &goose->x, &goose->y);
+//	goose->x = rand() % goose->x;
+//	goose->y = rand() % goose->y;
+//}
+//
+//static void get_direction(t_couple *start, t_couple *end, t_couple_double *direction)
+//{
+//	double	dist;
+//	double	dist_x;
+//	double	dist_y;
+//
+//	dist_x = end->x - start->x;
+//	dist_y = end->y - start->y;
+//	dist = sqrt(dist_x * dist_x + dist_y * dist_y);
+//	direction->x = dist_x / dist;
+//	direction->y = dist_y / dist;
+//}
 
 #define _NET_WM_STATE_REMOVE        0    // remove/unset property
 #define _NET_WM_STATE_ADD           1    // add/set property
