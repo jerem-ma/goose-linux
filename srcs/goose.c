@@ -6,7 +6,7 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:04:49 by jmaia             #+#    #+#             */
-/*   Updated: 2022/03/03 17:42:58 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/07 21:56:09 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //static void	get_direction(t_couple *start, t_couple *end, t_couple_double *direction);
 Bool	MakeAlwaysOnTop(Display* display, Window root, Window mywin);
 t_img	*rotate(t_xvar *mlx_ptr, t_img *img, double angle);
-void	shear(double angle, int *x, int *y);
+void	shear(double angle, double *x, double *y);
 
 void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img)
 {
@@ -31,61 +31,70 @@ void	goose(t_xvar *mlx_ptr, t_win_list *w_list, t_img *img)
 		r_img = rotate(mlx_ptr, img, i);
 		mlx_put_image_to_window(mlx_ptr, w_list, r_img, 40, 40);
 		i += 0.1;
-		usleep(100000000);
+		usleep(100000);
 	}
 }
 
 t_img	*rotate(t_xvar *mlx_ptr, t_img *img, double angle)
 {
-	t_img		*r_img;
-	int			new_width;
-	int			new_height;
-	t_couple	pos_old_img;
-	t_couple	pos_new_img;
-	int			junk;
-	char		*data;
-	char		*r_data;;
+	t_img			*r_img;
+	int				new_width;
+	int				new_height;
+	t_couple_double	pos_old_img;
+	t_couple_double	pos_new_img;
+	int				junk;
+	int				*data;
+	int				*r_data;;
 
-	new_width = fabs(img->width * cos(angle)) + fabs(img->height * sin(angle));
-	new_height = fabs(img->height * cos(angle)) + fabs(img->width * sin(angle));
+	new_width = round(fabs(img->width * cos(angle)) + fabs(img->height * sin(angle)))+1;
+	new_height = round(fabs(img->height * cos(angle)) + fabs(img->width * sin(angle)))+1;
 	r_img = mlx_new_image(mlx_ptr, new_width, new_height);
 	if (!r_img)
 		return (0);
-	double	original_centre_height = (img->height+1)/2-1;
-	double	original_centre_width = (img->width+1)/2-1;
+	double	original_centre_height = round(((double) img->height+1)/2-1);
+	double	original_centre_width = round(((double) img->width+1)/2-1);
 
-	double	new_centre_height = (new_height+1)/2-1;
-	double	new_centre_width = (new_width+1)/2-1;
-	data = mlx_get_data_addr(img, &junk, &junk, &junk);
-	r_data = mlx_get_data_addr(r_img, &junk, &junk, &junk);
+	double	new_centre_height = round(((double) new_height+1)/2-1);
+	double	new_centre_width = round(((double) new_width+1)/2-1);
+	printf("ANGLE : %f\n", angle);
+	printf("Original centre (height/width) : %f %f\n", original_centre_height, original_centre_width);
+	printf("New centre (height/width) : %f %f\n", new_centre_height, new_centre_width);
+	data = (int *) mlx_get_data_addr(img, &junk, &junk, &junk);
+	r_data = (int *) mlx_get_data_addr(r_img, &junk, &junk, &junk);
+	pos_old_img.y = 0;
 	while (pos_old_img.y < img->height)
 	{
 		pos_old_img.x = 0;
 		while (pos_old_img.x < img->width)
 		{
+			printf("Pos_old_img after begin: %f %f\n", pos_old_img.x, pos_old_img.y);
 			pos_new_img.x = img->width - 1 - pos_old_img.x - original_centre_width;
 			pos_new_img.y = img->height - 1 - pos_old_img.y - original_centre_height;
+			printf("Pos_new_img after begin: %f %f\n", pos_new_img.x, pos_new_img.y);
 			shear(angle, &pos_new_img.x, &pos_new_img.y);
+			printf("Pos_new_img after shear: %f %f\n", pos_new_img.x, pos_new_img.y);
 			pos_new_img.x = new_centre_width - pos_new_img.x;
 			pos_new_img.y = new_centre_height - pos_new_img.y;
-			r_data[pos_new_img.y * new_width + pos_new_img.x] = data[pos_old_img.y * img->width + pos_old_img.x];
+			printf("Pos_new_img after correct: %f %f\n", pos_new_img.x, pos_new_img.y);
+			r_data[(int) pos_new_img.y * new_width + (int) pos_new_img.x] = data[(int) pos_old_img.y * img->width + (int) pos_old_img.x];
 			pos_old_img.x++;
+			printf("\n");
 		}
 		pos_old_img.y++;
 	}
 	return (r_img);
 }
 
-void	shear(double angle, int *x, int *y)
+void	shear(double angle, double *x, double *y)
 {
 	double	tangent;
 
 	tangent = tan(angle / 2);
-	*x = *x - (double) *y * tangent;
+	*x = round(*x - *y * tangent);
 
-	*y = (double) *x * sin(angle) + *y;
+	*y = round(*x * sin(angle) + *y);
 
-	*x = *x - (double) *y * tangent;
+	*x = round(*x - *y * tangent);
 }
 
 //static void	generate_goose_pos(t_xvar *mlx_ptr, t_goose *goose)

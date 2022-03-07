@@ -6,7 +6,7 @@ SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c mlx_new
 _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
 
-CC			=	cc
+CC			=	clang
 CFLAGS		=	-Wall -Werror -Wextra -g3 -O0 -fsanitize=address
 INCLUDE		=	-I includes/ -I libs/minilibx-linux
 LIBS		=	libs/minilibx-linux/libmlx.a

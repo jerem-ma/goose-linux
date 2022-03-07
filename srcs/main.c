@@ -6,7 +6,7 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 16:13:07 by jmaia             #+#    #+#             */
-/*   Updated: 2022/03/03 17:50:23 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/07 21:34:14 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int	main(int ac, char **av)
 	XSynchronize(mlx_ptr->display, True);
 	if (!mlx_ptr)
 		return (0);
-	path = malloc(sizeof(*path) * 50);
-	memcpy(path, dirname(av[0]), strlen(dirname(av[0])));
-	path[strlen(dirname(av[0]))] = 0;
+	path = malloc(sizeof(*path) * 500);
+	memcpy(path, dirname(strdup(av[0])), strlen(dirname(strdup(av[0]))));
+	path[strlen(dirname(strdup(av[0])))] = 0;
 	printf("%s\n", path);
-	img = farbfeld_to_img(mlx_ptr, strcat(path, "/res/little_goose.ff"));
+	img = farbfeld_to_img(mlx_ptr, strcat(path, "/res/pouet.ff"));
 	if (!img)
 	{
 		destroy_everything(mlx_ptr, 0);
