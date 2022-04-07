@@ -1,6 +1,6 @@
 # mlx-capivara
 
-A simple Capivara in C (Fork of Jérémy https://github.com/jerem-ma/goose-linux)
+A simple Capivara in C (forked from Jérémy https://github.com/jerem-ma/goose-linux)
 
 
 ## Installation
