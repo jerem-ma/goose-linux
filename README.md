@@ -1,6 +1,6 @@
 # mlx-capivara
 
-Uma simples capivara no seu desktop linux
+Uma simples capivara no seu desktop linux <br>
 (fork baseado no projeto original do Jérémy https://github.com/jerem-ma/goose-linux)
 
 ### Tecnologias
